@@ -1,52 +1,31 @@
 package reflection.practiceproblems.basiclevel.accessprivatefield;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Scanner;
 
-public class ClassInfo {
+public class Person {
+    private int age;
+
+    public Person(int age) {
+        this.age = age;
+    }
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        // Prompt the user to enter a class name
-        System.out.print("Enter the class name: ");
-        String className = scanner.nextLine();
-
         try {
-            // Obtain the Class object for the given class name
-            Class<?> cls = Class.forName(className);
+            Person person = new Person(25);
 
-            // Display the class name
-            System.out.println("Class: " + cls.getName());
+            Field ageField = Person.class.getDeclaredField("age");
+            ageField.setAccessible(true);
 
-            // Display the constructors of the class
-            System.out.println("\nConstructors:");
-            Constructor<?>[] constructors = cls.getConstructors();
-            for (Constructor<?> constructor : constructors) {
-                System.out.println(constructor);
-            }
+            // Get the value of the private field
+            int age = (int) ageField.get(person);
+            System.out.println("Age before modification: " + age);
 
-            // Display the fields of the class
-            System.out.println("\nFields:");
-            Field[] fields = cls.getDeclaredFields();
-            for (Field field : fields) {
-                System.out.println(field);
-            }
-
-            // Display the methods of the class
-            System.out.println("\nMethods:");
-            Method[] methods = cls.getDeclaredMethods();
-            for (Method method : methods) {
-                System.out.println(method);
-            }
-
-        } catch (ClassNotFoundException e) {
-            System.out.println("Class not found: " + className);
-        } catch (Exception e) {
+            // Set the value of the private field
+            ageField.set(person, 30);
+            age = (int) ageField.get(person);
+            System.out.println("Age after modification: " + age);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
-        } finally {
-            scanner.close();
         }
     }
 }

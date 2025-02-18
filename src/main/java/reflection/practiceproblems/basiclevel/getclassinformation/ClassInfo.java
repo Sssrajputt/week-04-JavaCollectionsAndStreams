@@ -4,45 +4,47 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Scanner;
-import java.util.*;
 
 public class ClassInfo {
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter class name: ");
+
+        // Prompt the user to enter a class name
+        System.out.print("Enter the class name: ");
         String className = scanner.nextLine();
 
         try {
-            // Load the class dynamically based on user input
-            Class<?> clazz = Class.forName(className);
+            // Obtain the Class object for the given class name
+            Class<?> cls = Class.forName(className);
 
-            // Display class name
-            System.out.println("Class: " + clazz.getName());
+            // Display the class name
+            System.out.println("Class: " + cls.getName());
 
-            // Display methods
-            System.out.println("\nMethods:");
-            Method[] methods = clazz.getDeclaredMethods();
-            for (Method method : methods) {
-                System.out.println(method);
-            }
-
-            // Display fields
-            System.out.println("\nFields:");
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field field : fields) {
-                System.out.println(field);
-            }
-
-            // Display constructors
+            // Display the constructors of the class
             System.out.println("\nConstructors:");
-            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            Constructor<?>[] constructors = cls.getConstructors();
             for (Constructor<?> constructor : constructors) {
                 System.out.println(constructor);
             }
 
+            // Display the fields of the class
+            System.out.println("\nFields:");
+            Field[] fields = cls.getDeclaredFields();
+            for (Field field : fields) {
+                System.out.println(field);
+            }
+
+            // Display the methods of the class
+            System.out.println("\nMethods:");
+            Method[] methods = cls.getDeclaredMethods();
+            for (Method method : methods) {
+                System.out.println(method);
+            }
+
         } catch (ClassNotFoundException e) {
             System.out.println("Class not found: " + className);
+        } catch (Exception e) {
+            e.getMessage();
         } finally {
             scanner.close();
         }
